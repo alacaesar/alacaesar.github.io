@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Image Distortion using PaperJS</title>
+		<meta name="description" content="Image Distortion Mesh using PaperJS: Image distortion effect with triangulated mesh with PaperJS" />
+		<meta name="keywords" content="image distortion, triangulation, canvas, paperjs, mesh, html5" />
+		<meta name="author" content="Alaa Alnuaimi - minus99.com" />
+		<script type="text/javascript" src="dist/jquery.js"></script>
+		<script type="text/javascript" src="dist/paper-full.min.js"></script>
+		
+		<style>
+		html, body{ margin: 0; font-family: arial; overflow: hidden; }
+		.adjustment{ position: fixed; top: 0; right: 0; width: 140px; background:#666;}
+		.adjustment div{ border-bottom: 1px solid #555; border-top: 1px solid #777; padding:10px 15px; }
+		label{ font-size: 11px; color: #ddd; }
+		input, select, button{ width: 100%; }
+		h4{ color: #ddd; padding:10px 15px;  background:#555; margin: 0; font-weight: normal; }
+		small{ position: fixed; left: 20px; bottom: 20px; font-size: 12px; }
+		</style>
+		
+		<script type="text/javascript">
+		var	paperscript = {},
+			args = {},
+			
+			distort = {fire:function(){
+			
+			$(":input:not(button)").change(function(){ updateVariables($(this)); }).change();
+			$("#render").click(updateVariables);
+			$("#export").click(exportImage);
+		}}
+		
+		function exportImage()
+		{
+			var canvas = document.getElementById("stage");
+			var dataURL = canvas.toDataURL();
+			window.open(dataURL, "toDataURL() image", "width=800, height=600");
+		}
+		
+		function updateVariables(){
+			args.size = $("#size input").val() * 10,
+			args.resolution = 4 + Math.round($("#resolution input").val() * .96);
+			args.noise = $("#noise input").val() * 2;
+			args.pattern = $("#pattern select").val();
+				
+			$(":input:not(button)").each(function(){
+				$(this).siblings("label").children("b").text( args[$(this).parent("div").attr("id")] );
+			});
+			
+			paperscript.initDistortion(args);	
+			paperscript.v.play();
+		}
+		</script>
+		<script type="text/paperscript" canvas="stage" src="js/triangular.js"></script>
+	</head>
+	<body>
+		<canvas id="stage" resize="true" stats hidpi="on"></canvas>
+		<div class="adjustment">
+			<h4>Adjustment</h4>
+			<div id="size"><label>Size: <b></b></label><input type="range" value="80"></div>
+			<div id="resolution"><label>Resolution: <b></b></label><input type="range" value="35"></div>
+			<div id="noise"><label>Noise: <b></b></label><input type="range" value="13"></div>
+			<div id="pattern"><label>Pattern: </label>
+				<select>
+					<option value="diamond">Diamond</option>
+					<option value="wave">Wave</option>
+					<option value="diagonal">Diagonal</option>
+				</select>
+			</div>
+			<div><button id="render">Re-render</button></div>
+			<div><button id="export">Export image</button></div>
+			
+		</div>
+		<small>Drag & drop an image from your desktop to distort it.</small>
+	</body>
+</html>
