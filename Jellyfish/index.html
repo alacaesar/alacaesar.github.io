@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+		<title>Image Distortion using PaperJS</title>
+		<meta name="description" content="Image Distortion Mesh using PaperJS: Image distortion effect with triangulated mesh with PaperJS" />
+		<meta name="keywords" content="image distortion, triangulation, canvas, paperjs, mesh, html5" />
+		<meta name="author" content="Alaa Alnuaimi - minus99.com" />
+		<script type="text/javascript" src="dist/jquery.js"></script>
+		<script type="text/javascript" src="dist/paper-full.min.js"></script>
+		
+		<style>
+		html, body{ margin: 0; font-family: arial; overflow: hidden; background: linear-gradient(45deg, blue, mediumblue); }
+		.adjustment{ position: fixed; top: 0; right: 0; width: 140px; background:#666; display: none;}
+		.adjustment div{ border-bottom: 1px solid #555; border-top: 1px solid #777; padding:10px 15px; }
+		label{ font-size: 11px; color: #ddd; }
+		input, select, button{ width: 100%; }
+		h4{ color: #ddd; padding:10px 15px;  background:#555; margin: 0; font-weight: normal; }
+		small{ position: fixed; left: 20px; bottom: 20px; font-size: 12px; }
+		
+		</style>
+		
+		<script type="text/javascript">
+		var	paperscript = {},
+			args = {}
+			
+			$(document).ready(function(){
+				$(":input:not(button)").change(function(){ updateVariables($(this)); });
+			});
+			
+		function updateVariables(){
+			args.radius = $("#radius input").val() * 4,
+			args.thickness = Math.round($("#thickness input").val() * .1);
+			args.shift = Math.round($("#shift input").val() * .5);
+			args.hue = Math.round($("#hue input").val() / 100 * 360);
+			args.hue_shift = Math.round($("#hue_shift input").val() / 100 * 360);
+			args.debug = ($("#debug select").val() === "true");
+			
+			console.log(args);
+				
+			$(":input:not(button)").each(function(){
+				$(this).siblings("label").children("b").text( args[$(this).parent("div").attr("id")] );
+			});
+			
+			paperscript.strings.init(args);	
+			paperscript.v.play();
+		}
+		</script>
+		<script type="text/paperscript" canvas="stage" src="js/jellyfish.js"></script>
+	</head>
+	<body>
+		<canvas id="stage" resize="true" stats hidpi="on"></canvas>
+		<div class="adjustment">
+			<h4>Adjustment</h4>
+			<div id="radius"><label>Radius: <b></b></label><input type="range" value="20"></div>
+			<div id="thickness"><label>String Thickness: <b></b></label><input type="range" value="10"></div>
+			<div id="shift"><label>Intensity: <b></b></label><input type="range" value="30"></div>
+			<div id="hue"><label>Color Hue: <b></b></label><input type="range" value="85"></div>
+			<div id="hue_shift"><label>Color Hue Shift: <b></b></label><input type="range" value="30"></div>
+			<div id="debug"><label>Debug: </label>
+				<select>
+					<option value="false">Normal Mode</option>
+					<option value="true">Debug Mode</option>
+				</select>
+			</div>
+			
+		</div>
+		<small>Don't watch it too much! it hurts (:</small>
+	</body>
+</html>
