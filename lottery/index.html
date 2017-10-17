@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Sketch Licenses Winner Selector</title>
+<script type="text/javascript" src="dist/jquery.js"></script>
+<script type="text/javascript" src="dist/paper-full.min.js"></script>
+<script type="text/javascript" src="dist/TweenMax.min.js"></script>
+<script type="text/paperscript" src="js/letters.js" canvas="canvas"></script>
+<style>
+
+@font-face{
+  font-family:'Mn';
+  src:url('/assets/themes/space/fonts/maisonneue-light.woff2') format('woff2'),
+      url('/assets/themes/space/fonts/maisonneue-light.woff') format('woff'),
+      url('/assets/themes/space/fonts/maisonneue-light.ttf') format('truetype');
+  font-weight:normal;font-style:normal;
+}
+@font-face{
+  font-family:'Mn';
+  src:url('/assets/themes/space/fonts/maisonneue-medium.woff2') format('woff2'),
+      url('/assets/themes/space/fonts/maisonneue-medium.woff') format('woff'),
+      url('/assets/themes/space/fonts/maisonneue-medium.ttf') format('truetype');
+  font-weight:500;font-style:normal;
+}
+
+html, body{ margin: 0; padding: 0; font-family: arial; background: #D4E5FF; }
+canvas{ position: fixed; }
+ul{ right: 80px; bottom: 50px; font-size: 12px; margin: 0; padding: 0; font-family: "Menlo"; }
+ul li{ display: block; margin-bottom: 10px; }
+ul li a{ text-decoration: none; }
+ul li a:hover{ text-decoration: line-through; }
+ul li#log{ color: magenta; }
+
+div.people{ perspective:  800px; perspective-origin: 0px 0px; }
+div.people ul{ font-family: "Maison Neue"; font-size: 70px; font-weight: 500; padding: 100px 0 200px 300px;
+    transform: rotateY(-30deg); }
+div.people ul li{ margin-bottom: 20px; }
+
+body.start div.people ul{ font-size: 15px; padding:50px; transform: rotateY(0) !important; transition: all .5s cubic-bezier(0.645, 0.045, 0.355, 1.000); opacity: .8; }
+body.start div.people ul li{ margin-bottom: 5px; transition: font-size .5s; }
+
+ul.actions{ position: fixed; z-index: 10; }
+
+.adjustment{ position: fixed; top: 0; right: 0; width: 140px; background:#666;}
+		.adjustment div{ border-bottom: 1px solid #555; border-top: 1px solid #777; padding:10px 15px; }
+		label{ font-size: 11px; color: #ddd; }
+		input, select, button{ width: 100%; }
+		h4{ color: #ddd; padding:10px 15px;  background:#555; margin: 0; font-weight: normal; }
+		small{ position: fixed; left: 20px; bottom: 20px; font-size: 12px; }
+
+h1, h2{ position: fixed; top: 30px; width: 50px; height: 50px; background-size: contain; background-repeat: no-repeat; background-position: center center; margin: 0; padding: 0; }
+h1{ background-image:url(images/sketch_logo.svg); right: 50px; width: 40px; }
+h2{ background-image:url(images/-99-design-studio.svg); right: 120px; }
+</style>
+</head>
+
+<body onload="init();" class="">
+    <canvas id="canvas" resize stats hidpi="on"></canvas>
+	<ul class="actions">
+		<li><a href="javascript:void(0);" onclick="start()">START</a></li>
+		<li><a href="javascript:void(0);" onclick="shuffle()">SHUFFLE</a></li>
+		<li><a href="javascript:void(0);" onclick="selectAName()">NEXT</a></li>
+	</ul>
+
+	<h1></h1>
+	<h2></h2>
+
+	<div class="people">
+	<ul>
+
+	</ul>
+	</div>
+
+    <script type="text/javascript">
+
+		function init() {
+
+			shuffle();
+
+			$( window ).scroll(function(){
+
+				var perc = $(window).scrollTop() / ( $(document).height() - window.innerHeight );
+				$(".people").css("perspective-origin", "0 "+$(window).scrollTop()+"px");
+				$(".people ul").css("transform", "rotateY("+(-35 + perc*60)+"deg)");
+
+			});
+
+        }
+
+		function shuffle() {
+
+			console.log("sdsdsd");
+
+			shuffleArray(people);
+
+			$(".people ul").empty();
+
+			for(var i=0; i<people.length; ++i)
+			{
+				$(".people ul").append("<li id='s"+i+"'>"+people[i]+"</li>");
+			}
+        }
+
+		function start() {
+            $("body").toggleClass("start");
+			$("html, body").animate({ scrollTop: "0px" });
+
+			paperscript.refresh();
+        }
+
+		var names = 0;
+
+		function selectAName(){
+
+			if (names > 0) {
+                paperscript.clearAll();
+            }
+
+			if (names == 3) {
+                word.print("tesekkurler");
+            }
+			else
+			{
+			var person = Math.round(Math.random()*people.length-1);
+
+			setTimeout(function(){
+				word.print( people[person] );
+
+				$(".people ul li").each(function(){
+
+					if ($(this).text() == people[person] ){
+                        $(this).css({"color": "blue", "font-size": "18px"});
+                    }
+
+				});
+
+				//$(".people ul li#s"+person).css("color", "blue");
+
+				people.splice(person, 1);
+				names++;
+			}, 999);
+			}
+
+		};
+
+		var word = {
+			array:[],
+			print: function( str ){
+				if (this.i == 0){
+					this.array = str.split("");
+					this.loop();
+				}
+			},
+			loop: function(){
+				var array = this.array, i = this.i, _t = this;
+
+				if ( array[i] === " ")
+					paperscript.input("space");
+				else
+					paperscript.input( array[i] );
+
+				this.i++;
+
+				if (this.i < array.length)
+					this.timeout = setTimeout(function(){ _t.loop(); }, 333);
+				else
+					this.i = 0;
+			},
+			i: 0
+		}
+
+		function shuffleArray(array) {
+			for (var i = array.length - 1; i > 0; i--) {
+				var j = Math.floor(Math.random() * (i + 1));
+				var temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+			}
+			return array;
+		}
+
+		var paperscript = {};
+		var people = ['Selcan Özdemir',
+                  'Cuma Çiftçi',
+                  'Sebahattin Musaoğlu',
+                  'Ceren Varol',
+                  'Duygu Özgül',
+                  'Nagihan Özen',
+                  'Alp Allovi',
+                  'İbrahim Yağmur',
+                  'Begüm Akın',
+                  'Güney Güner',
+                  'Asya Naz Altun',
+                  'Ayse Bilgin Celikdelen',
+                  'Feyyaz Berber',
+                  'İlker Kurtuldu',
+                  'Janset Merve Çimen',
+                  'Duygu Tozduman',
+                  'Feyza Ece Dağıstan',
+                  'Ekrem Madarcı',
+                  'Ahmet Suekinci',
+                  'Yakup Zağlı',
+                  'Eren Bora',
+                  'Batuhan Üstünel',
+                  'Burcu Durgut',
+                  'İsmail Tulu',
+                  'İsmail İlkhan Nural',
+                  'Bahadır Dindar',
+                  'Emrah Yaman',
+                  'Yağız Mert Özçelenk',
+                  'Ceyda Hakdiyen',
+                  'Özlem Yürük',
+                  'Duygu Şenalp',
+                  'Halil Eren Çelik',
+                  'Nazlı Tuğçe Üncü',
+                  'Merve Bacınoğlu',
+                  'Dilek Yıldız',
+                  'Dilek Yıldız 2',
+                  'Dilek Yıldız 3',
+                  'Dilek Yıldız 4',
+                  'Ahmet Burak Bal',
+                  'Melike Sherifi',
+                  'Melike Sherifi 2',
+                  'Ozancan',
+                  'Volkan Şenozan',
+                  'Irmak Wöber',
+                  'Umut Koca',
+                  'Özlem Kara',
+                  'Ersun Batur',
+                  'Berke Üstünkök',
+                  'Ayşegül Dere',
+                  'Arda Ulukut',
+                  'Senem Alptekin',
+                  'Neslihan Yaman'];
+    </script>
+</body>
+</html>
