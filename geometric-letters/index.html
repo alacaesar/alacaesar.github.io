@@ -22,10 +22,13 @@ ul li#log{ color: magenta; }
 		input, select, button{ width: 100%; }
 		h4{ color: #ddd; padding:10px 15px;  background:#555; margin: 0; font-weight: normal; }
 		small{ position: fixed; left: 20px; bottom: 20px; font-size: 12px; }
-		
+
 .adjustment section { transform: translateX(125px); background: rgba(0,0,0,.6); border-radius: 0 0 0 5px; transition: transform .3s cubic-bezier(0.165, 0.840, 0.440, 1.000); }
 .adjustment:hover section{ transform: translateX(0); }
 
+a.github{ transition: all .5s ease-out; position: fixed; right: 20px; bottom: 50px; display: block; background: #f5f5f5; height: 20px; line-height: 20px; color: #333; width: 100px; border-radius: 5px; box-shadow: 1px 1px 3px rgba(0,0,0,.1); font-size: 13px; font-family: arial; text-decoration:none; padding:5px 8px; }
+a.github svg{ vertical-align: bottom; }
+a.github:hover{ box-shadow: 3px 6px 5px rgba(0,0,0,0.1); background: #fff; }
 </style>
 </head>
 <body>
@@ -39,29 +42,25 @@ ul li#log{ color: magenta; }
 		<section>
 			<h4>Adjustment</h4>
 			<div id="count"><label>Start Count: <b></b></label><input type="range" value="25"></div>
-			<div id="size"><label>Font Size: <b></b></label><input type="range" value="50"></div>
 			<div id="letterspacing"><label>Letter-spacing: <b></b></label><input type="range" value="10"></div>
 			<div id="disturbance"><label>Disturbance: <b></b></label><input type="range" value="30"></div>
-			<div id="hue"><label>Hue: <b></b></label><input type="range" value="66"></div>
 			<div id="velocityx"><label>Velocity X: <b></b></label><input type="range" value="20"></div>
 			<div id="velocityy"><label>Velocity Y: <b></b></label><input type="range" value="20"></div>
-			<div id="debug"><label>Debug: </label>
-				<select>
-					<option value="false">Normal Mode</option>
-					<option value="true">Debug Mode</option>
-				</select>
-			</div>
 			</section>
 		</div>
+		<a class="github" href="https://github.com/alacaesar/alacaesar.github.io/tree/master/blossom">
+			<svg aria-hidden="true" class="octicon octicon-mark-github" height="20" version="1.1" viewBox="0 0 16 16" width="20"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
+			View source
+		</a>
     <script type="text/javascript">
-		
+
 		var paperscript = {};
 			args = {}
-		
+
 		$(document).ready(function(){
 				$(":input:not(button)").change(function(){ updateVariables($(this)); });
 			});
-			
+
 		function updateVariables(){
 			args.count = $("#count input").val() * 2,
 			args.size = Math.round(parseInt($("#size input").val()) + 10);
@@ -71,24 +70,24 @@ ul li#log{ color: magenta; }
 			args.velocityx = Math.round($("#velocityx input").val() * .3);
 			args.velocityy = Math.round($("#velocityy input").val() * .3);
 			args.debug = ($("#debug select").val() === "true");
-			
+
 			//console.log(args);
-				
+
 			$(":input:not(button)").each(function(){
 				$(this).siblings("label").children("b").text( args[$(this).parent("div").attr("id")] );
 			});
-			
+
 			paperscript.refresh( args );
-			
-			//paperscript.strings.init(args);	
+
+			//paperscript.strings.init(args);
 			//paperscript.v.play();
 		}
-		
-        
+
+
         $(document).keydown(function(e){
-            
+
             //e.preventDefault();
-            
+
             switch ( e.which ) {
                 case 8:
                         paperscript.input("delete");
@@ -101,12 +100,12 @@ ul li#log{ color: magenta; }
 						var regex = new RegExp("^[a-zA-Z 0-9]+$");
 						var key = String.fromCharCode(!e.charCode ? e.which : e.charCode);
 						if (regex.test(key)) {
-							paperscript.input( String.fromCharCode(e.which) );            
+							paperscript.input( String.fromCharCode(e.which) );
 						}
                     }
-            }            
+            }
 		});
-		
+
 		var translate = {
 				"0": "zero",
 				"1": "one",
@@ -133,20 +132,20 @@ ul li#log{ color: magenta; }
 				"40": "fourty",
 				"50": "fifty"
 		};
-		
+
 		var time = {
 			print: function()
 			{
 				var now = new Date(),
 				h = now.getHours(),
 				m = now.getMinutes(),
-				
+
 				_h = translate[ h ],
 				_m = m < 21 ? translate[m] : translate[ m - (m % 10) ] + ( m % 10 == 0 ? "" : " " + translate[ m % 10]),
-				
+
 				string = _m + " minutes past "+ _h;
 				time.array = string.split("");
-				
+
 				time.loop();
 			},
 			loop: function()
@@ -156,7 +155,7 @@ ul li#log{ color: magenta; }
 				}
 				else
 					paperscript.input( time.array[time.k] );
-				
+
 				time.k++;
 				if ( time.k < time.array.length )
 					setTimeout(function(){ time.loop(); }, 222);
