@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Shades - ThreeJS Experiment by Alaa Alnuaimi</title>
+		<meta name="description" content="Image Distortion Mesh using PaperJS: Image distortion effect with triangulated mesh with PaperJS" />
+		<meta name="keywords" content="image distortion, triangulation, canvas, paperjs, mesh, html5" />
+		<meta name="author" content="Alaa Alnuaimi - minus99.com" />
+		<script type="text/javascript" src="lib/jquery.js"></script>
+		<script type="text/javascript" src="lib/tinycolor.js"></script>
+		<script type="text/javascript" src="lib/TweenMax.min.js"></script>
+		<script type="text/javascript" src="js/colors.js"></script>
+		<script type="text/javascript" src="build/three.js"></script>
+		<script type="text/javascript" src="build/Stats.js"></script>
+		<script type="text/javascript" src="build/OrbitControls.js"></script>
+
+		<script src="build/shaders/CopyShader.js"></script>
+		<script src="build/shaders/DotScreenShader.js"></script>
+		<script src="build/shaders/RGBShiftShader.js"></script>
+
+		<script src="build/postprocessing/EffectComposer.js"></script>
+		<script src="build/postprocessing/RenderPass.js"></script>
+		<script src="build/postprocessing/MaskPass.js"></script>
+		<script src="build/postprocessing/ShaderPass.js"></script>
+
+		<style>
+		h1,p, menu, ul, li{ margin: 0; padding: 0; list-style: none; }
+		html, body{ margin: 0; font-family: 'Space Mono'; font-weight: 100; font-size: 0; color: #fff; }
+		canvas{ border: 1px solid #000; }
+
+		a{ color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,.4); }
+		a:hover{ border-bottom-color: rgba(255,255,255,1);}
+		li{ margin-bottom: 3px; }
+
+		nav{ position: fixed; left: 20px; top: 20px; }
+		nav h1{ font-weight: 100; font-size: 20px; }
+		p{ font-size: 12px; }
+
+		div{ }
+		.av div{ border: 1px solid #000; overflow: hidden; font-size: 9px; }
+		td{ vertical-align: top;}
+		td h4{ font-size: 13px; }
+
+	.thumbs{ position: fixed; left: 20px; bottom: 100px; opacity: .5; display: none;}
+		.thumbs:hover{ opacity: 1; }
+		.thumbs a{ display: inline-block; width: 50px; margin-right: 10px; }
+		.thumbs a img{ width: 100%; height: auto; }
+		.thumbs p{ margin-top: 10px; }
+
+		menu{
+			position: fixed;
+			left: 20px;
+			top: 200px;
+			font-size: 13px;
+		}
+		</style>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-4302615-22"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'UA-4302615-22');
+		</script>
+	</head>
+	<body>
+		<nav>
+		<h1>SHADES</h1>
+		<p>By <a href="http://www.twitter.com/alacaesar">@alacaesar</a></p>
+		</nav>
+
+		<script type="text/javascript" src="js/shades.js"></script>
+		<div class="av"></div>
+		<table class="sg">
+			<tr>
+				<td id="red"><h4>red</h4></td>
+				<td id="yellow"><h4>yellow</h4></td>
+				<td id="green"><h4>green</h4></td>
+				<td id="blue"><h4>blue</h4></td>
+			</tr>
+		</table>
+		<menu>
+			<ul>
+				<li><a href="javascript:void(0);" id="default">Default</a></li>
+				<li><a href="javascript:void(0);" id="shades">Shades</a></li>
+				<li><a href="javascript:void(0);" id="red">Red</a></li>
+				<li><a href="javascript:void(0);" id="green">Green</a></li>
+				<li><a href="javascript:void(0);" id="blue">Blue</a></li>
+				<li><a href="javascript:void(0);" id="brightness">Brightness</a></li>
+			</ul>
+		</menu>
+		<div class="thumbs">
+			<a href="javascript:void(0);"><img src="assets/01.jpg" /></a>
+			<a href="javascript:void(0);"><img src="assets/02.jpg" /></a>
+			<a href="javascript:void(0);"><img src="assets/03.jpg" /></a>
+			<p>Drag and drop and image from your desktop to analyze it.</p>
+		</div>
+		<script>
+			$("menu ul li a").click(function(){
+				action( $(this).attr("id") );
+				console.log( $(this).attr("id") );
+			});
+		</script>
+	</body>
+</html>
