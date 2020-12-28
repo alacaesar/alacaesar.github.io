@@ -62,7 +62,7 @@ function makeLetter( pos, character ) {
         p.fillColor = { hue: hue, saturation: 1, brightness: 1 }; //blue
         p.justification = "left";
         p.fontSize = fontsize;
-        p.fontFamily = "Apercu";
+        p.fontFamily = "courier";
         p.content = p._val = letter;
         p.pivot = [0, 0];
         p.rotation = p._rotation = Math.random() * 360;
